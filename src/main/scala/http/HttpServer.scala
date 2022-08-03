@@ -18,7 +18,7 @@ class HttpServer(host: String, port: Int, routes: Route)(implicit
   val log: Logger = LoggerFactory.getLogger("http-server")
   private val shutdown = CoordinatedShutdown(system)
 
-  Http().newServerAt("localhost", 8080).bind(routes).onComplete {
+  Http().newServerAt(host, port).bind(routes).onComplete {
     case Success(binding) =>
       val address = binding.localAddress
       log.info(s"Server is running at http://{}:{}", address.getHostString, address.getPort)
