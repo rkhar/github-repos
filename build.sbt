@@ -14,6 +14,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
-
+  "ch.qos.logback" % "logback-classic" % "1.2.11",
   "org.scalameta" %% "scalafmt-dynamic" % "3.5.8"
 )

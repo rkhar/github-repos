@@ -1,12 +1,10 @@
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
-import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
-import akka.http.scaladsl.server.Directives.{complete, path}
 import akka.http.scaladsl.server.Directives._
+import http.HttpServer
 
 import scala.concurrent.ExecutionContextExecutor
-import scala.io.StdIn
 
 object Boot {
 
@@ -23,12 +21,6 @@ object Boot {
         }
       }
 
-    val bindingFuture = Http().newServerAt("localhost", 8080).bind(route)
-
-    StdIn.readLine() // let it run until user presses return
-    bindingFuture
-      .flatMap(_.unbind()) // trigger unbinding from the port
-      .onComplete(_ => system.terminate()) // and shutdown when done  }
-
+    new HttpServer("localhost", 8080, route)
   }
 }
