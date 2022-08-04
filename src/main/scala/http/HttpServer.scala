@@ -16,14 +16,13 @@ class HttpServer(host: String, port: Int, routes: Route)(implicit
     executionContext: ExecutionContext
 ) {
   val log: Logger = LoggerFactory.getLogger("http-server")
-  private val shutdown = CoordinatedShutdown(system)
 
   Http().newServerAt(host, port).bind(routes).onComplete {
     case Success(binding) =>
       val address = binding.localAddress
       log.info(s"Server is running at http://{}:{}", address.getHostString, address.getPort)
 
-      shutdown.addTask(CoordinatedShutdown.PhaseServiceRequestsDone, "http-graceful-terminate") { () =>
+      CoordinatedShutdown(system).addTask(CoordinatedShutdown.PhaseServiceRequestsDone, "http-graceful-terminate") { () =>
         binding.terminate(10.seconds).map { _ =>
           log.info("Server at http://{}:{}/ graceful shutdown completed", address.getHostString, address.getPort)
 
