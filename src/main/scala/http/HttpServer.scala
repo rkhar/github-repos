@@ -11,10 +11,8 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success}
 
-class HttpServer(host: String, port: Int, routes: Route)(implicit
-    system: ActorSystem[Nothing],
-    executionContext: ExecutionContext
-) {
+class HttpServer(host: String, port: Int, override val githubClient: GithubClient)(implicit val system: ActorSystem[Nothing], executionContext: ExecutionContext)
+    extends HttpRoutes {
   val log: Logger = LoggerFactory.getLogger("http-server")
 
   Http().newServerAt(host, port).bind(routes).onComplete {
